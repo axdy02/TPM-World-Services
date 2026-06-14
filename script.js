@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Intersection Observer for Fade-In Animations
     const fadeElements = document.querySelectorAll('.fade-in-up');
-    
+
     const fadeObserverOptions = {
         root: null,
         rootMargin: '0px',
@@ -73,9 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = +stat.getAttribute('data-target');
             const duration = 2000; // 2 seconds
             const increment = target / (duration / 16); // 60fps
-            
+
             let current = 0;
-            
+
             const updateCounter = () => {
                 current += increment;
                 if (current < target) {
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     stat.innerText = target;
                 }
             };
-            
+
             updateCounter();
         });
     };
@@ -110,23 +110,66 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const btn = contactForm.querySelector('.btn-submit');
             const originalText = btn.innerText;
-            
+
             btn.innerText = 'Sending...';
             btn.style.opacity = '0.8';
-            
+
             // Simulate network request
             setTimeout(() => {
                 btn.innerText = 'Message Sent!';
                 btn.style.background = '#27ae60';
                 btn.style.color = 'white';
                 contactForm.reset();
-                
+
                 setTimeout(() => {
                     btn.innerText = originalText;
                     btn.style.background = ''; // reset to class styling
                     btn.style.opacity = '1';
                 }, 3000);
             }, 1500);
+        });
+    }
+
+    // 5. Modal Functionality for "Learn More" buttons
+    const modal = document.getElementById('info-modal');
+    const learnMoreBtns = document.querySelectorAll('.learn-more-btn');
+    const closeBtn = document.querySelector('.close-modal');
+    const closeModalBtn = document.querySelector('.close-modal-btn');
+
+    if (modal && learnMoreBtns.length > 0) {
+        const hideModal = () => {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                if (!modal.classList.contains('show')) {
+                    modal.style.display = 'none';
+                }
+            }, 300);
+        };
+
+        learnMoreBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.style.display = 'flex';
+                // Trigger reflow
+                void modal.offsetWidth;
+                modal.classList.add('show');
+            });
+        });
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', hideModal);
+        }
+
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', () => {
+                hideModal();
+            });
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideModal();
+            }
         });
     }
 });
